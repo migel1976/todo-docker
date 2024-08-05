@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: ../dev-config/Dockerfile.frontend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../frontend:/usr/app
+
