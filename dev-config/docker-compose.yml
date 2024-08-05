@@ -1,12 +1,44 @@
-version: '3.8'
-
+version: '3.9'
 services:
   frontend:
     build:
       context: ../frontend
       dockerfile: ../dev-config/Dockerfile.frontend
     ports:
-      - "8080:8080"
+      - "5134:5134"
     volumes:
       - ../frontend:/usr/app
+    networks:
+      - todonet
+  db:
+    image: postgres
+    restart: always
+    shm_size: 128mb
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_DB: ${DATABASE_NAME}
+      # DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      # DATABASE_USERNAME: ${DATABASE_USERNAME}
+      # DATABASE_NAME: ${DATABASE_NAME}
+    #   POSTGRES_DB: "db" 
+    #   # PGDATA: /tmp
+    # # volumes:
+    #   - "db:/var/lib/postgresql/data"
+    networks:
+      - todonet
 
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - todonet
+        
+networks:
+  todonet:
+volumes:
+  db:
