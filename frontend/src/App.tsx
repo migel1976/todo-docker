@@ -9,6 +9,7 @@ function App() {
       Aloha
       {count}
       <button onClick={() => setCount(prev => prev + 1)}>increase</button>
+      <button onClick={() => setCount(prev => prev - 1)}>decrease</button>
     </>
   )
 }
