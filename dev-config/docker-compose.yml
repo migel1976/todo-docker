@@ -1,27 +1,58 @@
-version: '3.9'
+version: '3.8'
 services:
-    postgres:
-        image: postgres:15.1
-        restart: always
-        environment:
-            - POSTGRES_USER=my_user
-            - POSTGRES_PASSWORD=my_user
-            - POSTGRES_DB=my_user
-        user: root
-        ports:
-            - "5432:5432"
-        volumes:
-            - /home/my_user/volumes/postgres/data:/var/lib/postgresql/data
-            - /home/my_user/volumes/postgres/config:/etc/postgresql
-    postgres_setup:
-        image: postgres:15.1
-        user: root
-        volumes:
-            - /home/my_user/volumes/postgres/data:/var/lib/postgresql/data
-            - /home/my_user/volumes/postgres/config:/etc/postgresql
-        entrypoint: [ "bash", "-c", "chmod 750 -R /var/lib/postgresql/data && chmod 750 -R /etc/postgresql"] 
-        depends_on:
-            - postgres
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: ../dev-config/Dockerfile.frontend
+    ports:
+      - "5134:5134"
+    volumes:
+      - ../frontend:/usr/app
+    networks:
+      - todonet
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: ../dev-config/Dockerfile.backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../backend:/usr/app
+    networks:
+      - todonet
+# networks:
+#   todonet:
+  postgres:
+      image: postgres:15.1
+      restart: always
+      environment:
+          - POSTGRES_USER=my_user
+          - POSTGRES_PASSWORD=my_user
+          - POSTGRES_DB=User
+      user: root
+      ports:
+          - "5432:5432"
+      # volumes:
+      #     - /home/my_user/volumes/postgres/data:/var/lib/postgresql/data
+      #     - /home/my_user/volumes/postgres/config:/etc/postgresql
+  postgres_setup:
+      image: postgres:15.1
+      user: root
+      # volumes:
+      #     - /home/my_user/volumes/postgres/data:/var/lib/postgresql/data
+      #     - /home/my_user/volumes/postgres/config:/etc/postgresql
+      entrypoint: [ "bash", "-c", "chmod 750 -R /var/lib/postgresql/data && chmod 750 -R /etc/postgresql"] 
+      depends_on:
+          - postgres
+      networks:
+        - todonet
+      # psql -p 5432 -h 0.0.0.0 -U my_user
+      # connect to server
+
+networks:
+  todonet:
+
     # pgadmin4:
     #     image: dpage/pgadmin4
     #     restart: always
