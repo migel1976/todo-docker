@@ -89,11 +89,13 @@ const getAllUsers = async (req, res) => {
 //
 const remove = async (req, res) => {
   try {
-    const { id } = req.body
+    // const { id } = req.body
     // console.log('params ', req.params)
     // const { id } = req.params
-    console.log('remove id from sat table ', id)
+    // console.log('remove id from sat table ', id)
     // const { id } = req.body
+    const { id } = req.params
+    console.log('remove id from sat table ', id)
     await prisma.sat.delete({
       where: {
         id: +id
@@ -123,11 +125,16 @@ const remove = async (req, res) => {
 //
 const edit = async (req, res) => {
   try {
+
     const data = req.body
-    const id = data.id
+    // const id = data.id
+    const { id } = req.params
+
     console.log('edit id ', id)
     const editId = +id
+
     console.log('edit data ', data)
+
     await prisma.sat.update({
       where: { id: editId },
       // data: { ...data }
