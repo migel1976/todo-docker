@@ -5,6 +5,7 @@ const { add, remove, edit, getAllUsers, getUserByName } = require('../controller
 router.post('/add', add)
 router.get('/getall', getAllUsers)
 router.get('/getuserbyname/:id', getUserByName)
+// router.post('/remove', remove)
 router.post('/remove', remove)
 router.put('/edit', edit)
 
